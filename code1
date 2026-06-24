@@ -1,0 +1,57 @@
+import serial
+import numpy as np
+from scipy.io import wavfile
+from pathlib import Path
+
+# --- Configuration ---
+port = "/dev/tty.usbserial-0001"  # Change to your active COM port
+baud = 115200
+sample_rate = 10000
+duration_sec = 10
+target_lines = sample_rate * duration_sec
+output_dir = Path("recordings")
+output_dir.mkdir(exist_ok=True)
+
+clip_index = 1
+ser = None
+
+try:
+    ser = serial.Serial(port, baud, timeout=1)
+    ser.reset_input_buffer()
+
+    while True:
+        print(f"Recording clip {clip_index} ({duration_sec} seconds)...")
+        data = []
+
+        while len(data) < target_lines:
+            if ser.in_waiting:
+                line = ser.readline().decode('utf-8', errors='ignore').strip()
+                if line.isdigit():
+                    data.append(int(line))
+
+        print("Recording complete. Processing audio...")
+
+        raw_data = np.array(data)
+        centered = raw_data - np.mean(raw_data)
+
+        max_val = np.max(np.abs(centered))
+        if max_val > 0:
+            normalized = (centered / max_val) * 32767
+        else:
+            normalized = centered
+
+        output_file = output_dir / f"clip_{clip_index:04d}.wav"
+        wavfile.write(output_file, sample_rate, normalized.astype(np.int16))
+        print(f"Success! Saved as {output_file}")
+
+        clip_index += 1
+
+except KeyboardInterrupt:
+    print("Stopped by user.")
+except Exception as e:
+    print(f"Error: {e}")
+finally:
+    try:
+        ser.close()
+    except Exception:
+        pass

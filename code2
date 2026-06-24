@@ -1,0 +1,58 @@
+import serial
+import numpy as np
+import os
+from scipy.io import wavfile
+
+# --- Configuration ---
+port = "/dev/cu.usbserial-0001"  # Change to your active COM port
+baud = 115200
+sample_rate = 10000
+duration_sec = 5
+target_lines = sample_rate * duration_sec
+
+output_dir = "/Users/dulshiranaweera/Documents/RPW/recordings"
+os.makedirs(output_dir, exist_ok=True)
+
+print("Starting continuous recording loop... Press Ctrl+C to stop.")
+
+try:
+    ser = serial.Serial(port, baud, timeout=1)
+    ser.reset_input_buffer()
+    
+    file_buffer = []
+    file_num = 1
+    
+    while True:
+        if ser.in_waiting:
+            line = ser.readline().decode('utf-8', errors='ignore').strip()
+            if line.isdigit():
+                file_buffer.append(int(line))
+                
+                # Whenever we reach full 5 seconds
+                if len(file_buffer) >= target_lines:
+                    # 1. Process data
+                    raw_data = np.array(file_buffer)
+                    centered = raw_data - np.mean(raw_data)
+                    max_val = np.max(np.abs(centered))
+                    
+                    if max_val > 0:
+                        wav_data = ((centered / max_val) * 32767).astype(np.int16)
+                    else:
+                        wav_data = centered.astype(np.int16)
+                        
+                    # 2. Save
+                    output_file = f"{output_dir}/clip_{file_num}.wav"
+                    wavfile.write(output_file, sample_rate, wav_data)
+                    print(f"Saved: {output_file}")
+                    
+                    # 3. Clear buffer to start recording the next 5 seconds instantly!
+                    file_buffer = []
+                    file_num += 1
+
+except KeyboardInterrupt:
+    print("\nRecording stopped by user.")
+except Exception as e:
+    print(f"Error: {e}")
+finally:
+    if 'ser' in locals() and ser.is_open:
+        ser.close()
