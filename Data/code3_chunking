@@ -8,7 +8,7 @@ def split_wav(input_file, interval_ms):
     
     for i, start in enumerate(range(0, len(audio), interval_ms)):
         chunk = audio[start:start + interval_ms]
-        output_file = f"tree4_idle/tree4_idle_chunks/chunk_5006{i+1:03d}.wav"
+        output_file = f"Data/infected/infected_chunks/chunk_0026{i+1:03d}.wav"
         chunk.export(output_file, format="wav")
         chunks.append(output_file)
         print(f"Saved: {output_file} ({len(chunk)/1000:.1f}s)")
@@ -16,4 +16,4 @@ def split_wav(input_file, interval_ms):
     return chunks
 
 # Example: split into 30-second chunks
-split_wav("tree4_idle/clip_0006.wav", interval_ms=1000)
+split_wav("Data/infected/clip_0026.wav", interval_ms=1000)
