@@ -14,6 +14,7 @@ The Red Palm Weevil is a devastating pest that destroys coconut palms from the i
 
 ## 🏗️ Hardware Architecture
 
+![System architecture](Images/2.png)
 * **Processing Core:** ESP32-WROOM-32E / ESP32-S3 Microcontroller
 * **Sensor:** High-sensitivity piezo-electric vibration probe
 * **Analog Front-End:** Custom PCB with op-amp signal conditioning 
