@@ -3,6 +3,7 @@
 > **An AI-powered, low-cost edge computing device designed for the early detection of Red Palm Weevil (RPW) infestations in coconut trees.**
 
 ## 🎯 The Problem & Our Solution
+![Problem and Solution](Images/1.png)
 The Red Palm Weevil is a devastating pest that destroys coconut palms from the inside out, making early visual detection nearly impossible. Traditional acoustic monitoring tools rely on manual listening via earphones, which are highly susceptible to ambient environmental noise and inconvenient for prolonged field use. 
 
 **Our solution** is an AI-integrated, human-centric device that captures internal larval feeding sounds using a high-sensitivity acoustic probe. By processing these signals locally with a TinyML model, the device filters out background noise and provides a clear, real-time visual output of the tree's health status.
