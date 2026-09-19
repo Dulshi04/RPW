@@ -10,7 +10,7 @@ The Red Palm Weevil is a devastating pest that destroys coconut palms from the i
 
 ## ✨ Key Features
 ![Key Features](Images/3.png)
-![Key Features](Images/4.png)
+![Key Features 2](Images/4.png)
 * **Precision Acoustic Filtering:** Utilizes a piezo-electric sensor coupled with a custom operational amplifier and frequency filter (800 Hz - 2.5 kHz) to isolate high-frequency larval crunching sounds.
 * **Edge AI (TinyML):** Runs an ultra-lightweight, int8-quantized neural network locally on an ESP32 microcontroller. It achieves **88.8% accuracy**, requires only **19 KB of peak RAM**, and completes inference in ~145 ms—entirely offline.
 * **Intuitive User Interface:** Eliminates the need for constant earphone monitoring with a 4-digit 7-segment display and status LEDs (Green for healthy, Red for infected). Manual audio monitoring is still available as an optional feature.
